@@ -7,7 +7,8 @@ export const ERRORTYPE = {
 
 /**客户端操作类型 */
 export const ACTIONTYPE = {
-  CLICK: 'click',
+  CLICK: 'Click',
+  ROUTER: 'Router Change',
 }
 
 /**点击下面这些元素不会响应事件 */

@@ -8,3 +8,35 @@
  *
  * 拦截路由跳转
  */
+import * as Type from '../enums/type'
+const originPushState = window.history.pushState
+const originReplaceState = window.history.replaceState
+
+function __handleRouterChange(funcName, resHandle) {
+  const origin = window.history[funcName]
+  return function (...args) {
+    const to = args.length >= 2 ? args[2] : undefined
+    if (to) {
+      const pak = {
+        type: Type.ACTIONTYPE.ROUTER,
+        detail: {
+          changeType: funcName,
+          from: window.location.href,
+          to: String(to),
+        },
+      }
+      resHandle && resHandle(pak)
+    }
+    return origin.apply(this, args)
+  }
+}
+
+export function captureRouteChange(resHandle) {
+  window.history.pushState = __handleRouterChange('pushState', resHandle)
+  window.history.replaceState = __handleRouterChange('replaceState', resHandle)
+}
+
+export function destory() {
+  window.history.pushState = originPushState
+  window.history.replaceState = originReplaceState
+}

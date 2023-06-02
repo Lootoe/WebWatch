@@ -27,13 +27,26 @@ export default [
   //   // 需要额外引入的包
   //   // external: ['stacktracey'],
   // },
+  // {
+  //   input: './src/utils/domCapture.js',
+  //   output: [
+  //     {
+  //       file: './test/domCapture.js',
+  //       format: 'umd',
+  //       name: 'domCapture',
+  //     },
+  //   ],
+  //   plugins: [commonjs(), nodeResolve(), terser()],
+  //   // 需要额外引入的包
+  //   // external: ['dom-serializer'],
+  // },
   {
-    input: './src/utils/domCapture.js',
+    input: './src/utils/routerCapture.js',
     output: [
       {
-        file: './test/domCapture.js',
+        file: './test/routerCapture.js',
         format: 'umd',
-        name: 'domCapture',
+        name: 'routerCapture',
       },
     ],
     plugins: [commonjs(), nodeResolve(), terser()],
