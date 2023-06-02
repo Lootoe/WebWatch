@@ -13,11 +13,16 @@ export function getFullTime(timeStamp) {
   const d = new Date(timeStamp)
   const year = d.getFullYear()
   const month = d.getMonth() + 1
+  const actualMonth = month <= 9 ? `0${month}` : month
   const day = d.getDate()
+  const actualDay = day <= 9 ? `0${day}` : day
   const hours = d.getHours()
+  const actualHours = hours <= 9 ? `0${hours}` : hours
   const minute = d.getMinutes()
+  const actualMinute = minute <= 9 ? `0${minute}` : minute
   const second = d.getSeconds()
-  return `${year}-${month}-${day} ${hours}:${minute}:${second}`
+  const actualSecond = second <= 9 ? `0${second}` : second
+  return `${year}-${actualMonth}-${actualDay} ${actualHours}:${actualMinute}:${actualSecond}`
 }
 
 /**将DOM转换为字符串 */
