@@ -12,17 +12,18 @@
 import StackTracey from 'stacktracey'
 import { proxy, unProxy } from 'ajax-hook'
 
-import * as Enum from '../types/enum'
+import * as Type from '../enums/type'
+import * as Msg from '../enums/msg'
 
-const eventTable = {}
+let eventTable = {}
 
 /**处理资源报错 */
 function __handleResourceError(event) {
   // script image采用src，link采用href
   const url = event.target.src || event.target.href
   return {
-    type: Enum.ERRORTYPE.RESOURE,
-    message: event.message || Enum.ERRORMSG[Enum.ERRORTYPE.RESOURE],
+    type: Type.ERRORTYPE.RESOURE,
+    message: event.message || Msg.ERRORMSG[Type.ERRORTYPE.RESOURE],
     detail: {
       url: url,
     },
@@ -35,8 +36,8 @@ function __handleCodeError(event, stack) {
   // 拿到详细的报错信息
   const errorStack = tracey.items[0]
   return {
-    type: Enum.ERRORTYPE.CODE,
-    message: event.message || event.reason.msg || Enum.ERRORMSG[Enum.ERRORTYPE.CODE],
+    type: Type.ERRORTYPE.CODE,
+    message: event.message || event.reason.msg || Msg.ERRORMSG[Type.ERRORTYPE.CODE],
     detail: {
       line: errorStack.line,
       column: errorStack.column,
@@ -47,8 +48,8 @@ function __handleCodeError(event, stack) {
 
 function __handlePromiseError(event, message) {
   return {
-    type: Enum.ERRORTYPE.CODE,
-    message: message || Enum.ERRORMSG.PROMISE,
+    type: Type.ERRORTYPE.CODE,
+    message: message || Msg.ERRORMSG.PROMISE,
     detail: {
       reason: event.reason,
     },
@@ -57,8 +58,8 @@ function __handlePromiseError(event, message) {
 
 function __handleAPIError(xhrData, message) {
   return {
-    type: Enum.ERRORTYPE.API,
-    message: message || Enum.ERRORMSG[Enum.ERRORTYPE.API],
+    type: Type.ERRORTYPE.API,
+    message: message || Msg.ERRORMSG[Type.ERRORTYPE.API],
     datail: xhrData,
   }
 }
@@ -136,8 +137,9 @@ export function captureAPIError(resHandle, errHandle) {
 }
 
 /**移除所有事件监听器 */
-export function removeAllCaptures() {
+export function desotry() {
   eventTable.handleCodeError && window.removeEventListener('error', eventTable.handleCodeError)
   eventTable.handlePromiseError && window.removeEventListener('unhandledrejection', eventTable.handlePromiseError)
   unProxy()
+  eventTable = null
 }

@@ -14,17 +14,30 @@ import { nodeResolve } from '@rollup/plugin-node-resolve'
 import terser from '@rollup/plugin-terser'
 
 export default [
+  // {
+  //   input: './src/utils/errorCapture.js',
+  //   output: [
+  //     {
+  //       file: './test/errorCapture.js',
+  //       format: 'umd',
+  //       name: 'errorCapture',
+  //     },
+  //   ],
+  //   plugins: [commonjs(), nodeResolve(), terser()],
+  //   // 需要额外引入的包
+  //   // external: ['stacktracey'],
+  // },
   {
-    input: './src/utils/errorCapture.js',
+    input: './src/utils/domCapture.js',
     output: [
       {
-        file: './test/errorCapture.js',
+        file: './test/domCapture.js',
         format: 'umd',
-        name: 'errorCapture',
+        name: 'domCapture',
       },
     ],
     plugins: [commonjs(), nodeResolve(), terser()],
     // 需要额外引入的包
-    // external: ['stacktracey'],
+    // external: ['dom-serializer'],
   },
 ]
