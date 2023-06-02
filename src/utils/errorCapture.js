@@ -12,8 +12,8 @@
 import StackTracey from 'stacktracey'
 import { proxy, unProxy } from 'ajax-hook'
 
-import * as Type from '../enums/type'
-import * as Msg from '../enums/msg'
+import { ERRORTYPE } from '../enums/type'
+import { ERRORMSG } from '../enums/msg'
 
 let eventTable = {}
 
@@ -22,8 +22,8 @@ function __handleResourceError(event) {
   // script image采用src，link采用href
   const url = event.target.src || event.target.href
   return {
-    type: Type.ERRORTYPE.RESOURE,
-    message: event.message || Msg.ERRORMSG[Type.ERRORTYPE.RESOURE],
+    type: ERRORTYPE.RESOURE,
+    message: event.message || ERRORMSG[ERRORTYPE.RESOURE],
     detail: {
       url: url,
     },
@@ -36,8 +36,8 @@ function __handleCodeError(event, stack) {
   // 拿到详细的报错信息
   const errorStack = tracey.items[0]
   return {
-    type: Type.ERRORTYPE.CODE,
-    message: event.message || event.reason.msg || Msg.ERRORMSG[Type.ERRORTYPE.CODE],
+    type: ERRORTYPE.CODE,
+    message: event.message || event.reason.msg || ERRORMSG[ERRORTYPE.CODE],
     detail: {
       line: errorStack.line,
       column: errorStack.column,
@@ -48,8 +48,8 @@ function __handleCodeError(event, stack) {
 
 function __handlePromiseError(event, message) {
   return {
-    type: Type.ERRORTYPE.CODE,
-    message: message || Msg.ERRORMSG.PROMISE,
+    type: ERRORTYPE.CODE,
+    message: message || ERRORMSG.PROMISE,
     detail: {
       reason: event.reason,
     },
@@ -58,8 +58,8 @@ function __handlePromiseError(event, message) {
 
 function __handleAPIError(xhrData, message) {
   return {
-    type: Type.ERRORTYPE.API,
-    message: message || Msg.ERRORMSG[Type.ERRORTYPE.API],
+    type: ERRORTYPE.API,
+    message: message || ERRORMSG[ERRORTYPE.API],
     datail: xhrData,
   }
 }

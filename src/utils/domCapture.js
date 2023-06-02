@@ -9,8 +9,8 @@
  * 拦截点击事件
  */
 
-import * as TYPE from '../enums/type'
-import * as Tools from './tools'
+import { IgnoreElement, ACTIONTYPE } from '../enums/type'
+import { serializeDOM } from './tools'
 let eventTable = {}
 
 function __handleDOMEvent(event) {
@@ -28,12 +28,12 @@ export function captureDOM(resHandle) {
   eventTable.handleClickEvent = event => {
     // 点击这些元素不会响应
     const elemConstructor = event.target.constructor
-    const exist = TYPE.IgnoreElement.includes(elemConstructor)
+    const exist = IgnoreElement.includes(elemConstructor)
     if (exist) return
-    const domString = Tools.serialize(event.target)
+    const domString = serializeDOM(event.target)
     const data = __handleDOMEvent(event)
     const pak = {
-      type: TYPE.ACTIONTYPE.CLICK,
+      type: ACTIONTYPE.CLICK,
       detail: {
         dom: domString,
         ...data,

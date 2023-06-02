@@ -9,6 +9,7 @@ export const ERRORTYPE = {
 export const ACTIONTYPE = {
   CLICK: 'Click',
   ROUTER: 'Router Change',
+  API: 'Request',
 }
 
 /**点击下面这些元素不会响应事件 */

@@ -40,13 +40,26 @@ export default [
   //   // 需要额外引入的包
   //   // external: ['dom-serializer'],
   // },
+  // {
+  //   input: './src/utils/routerCapture.js',
+  //   output: [
+  //     {
+  //       file: './test/routerCapture.js',
+  //       format: 'umd',
+  //       name: 'routerCapture',
+  //     },
+  //   ],
+  //   plugins: [commonjs(), nodeResolve(), terser()],
+  //   // 需要额外引入的包
+  //   // external: ['dom-serializer'],
+  // },
   {
-    input: './src/utils/routerCapture.js',
+    input: './src/utils/requestCapture.js',
     output: [
       {
-        file: './test/routerCapture.js',
+        file: './test/requestCapture.js',
         format: 'umd',
-        name: 'routerCapture',
+        name: 'requestCapture',
       },
     ],
     plugins: [commonjs(), nodeResolve(), terser()],

@@ -8,3 +8,14 @@
  *
  * 拦截接口请求
  */
+
+import { ACTIONTYPE } from '../enums/type'
+
+/**捕获接口请求，参数是CaptureAPIError传过来的数据 */
+export function captureRequest(data, resHandle) {
+  const pak = {
+    type: ACTIONTYPE.API,
+    data: data,
+  }
+  resHandle && resHandle(pak)
+}

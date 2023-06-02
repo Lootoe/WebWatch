@@ -8,7 +8,7 @@
  *
  * 拦截路由跳转
  */
-import * as Type from '../enums/type'
+import { ACTIONTYPE } from '../enums/type'
 const originPushState = window.history.pushState
 const originReplaceState = window.history.replaceState
 
@@ -18,7 +18,7 @@ function __handleRouterChange(funcName, resHandle) {
     const to = args.length >= 2 ? args[2] : undefined
     if (to) {
       const pak = {
-        type: Type.ACTIONTYPE.ROUTER,
+        type: ACTIONTYPE.ROUTER,
         detail: {
           changeType: funcName,
           from: window.location.href,

@@ -22,7 +22,7 @@ export function getFullTime(timeStamp) {
 
 /**将DOM转换为字符串 */
 const serializer = new XMLSerializer()
-export function serialize(dom) {
+export function serializeDOM(dom) {
   // 去除他的子节点，可以用复制节点来替代
   const domItSelf = dom.cloneNode(false)
   // <div xmlns="http://www.w3.org/1999/xhtml " id="unique"></div>
