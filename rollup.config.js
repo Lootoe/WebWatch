@@ -25,13 +25,24 @@ export default [
   //   ],
   //   plugins: [commonjs(), nodeResolve(), terser()],
   // },
+  // {
+  //   input: './src/core/ua.js',
+  //   output: [
+  //     {
+  //       file: './test/ua/ua.js',
+  //       format: 'umd',
+  //       name: 'ua',
+  //     },
+  //   ],
+  //   plugins: [commonjs(), nodeResolve(), terser()],
+  // },
   {
-    input: './src/core/ua.js',
+    input: './src/core/recorder.js',
     output: [
       {
-        file: './test/ua/ua.js',
+        file: './test/recorder/recorder.js',
         format: 'umd',
-        name: 'ua',
+        name: 'recorder',
       },
     ],
     plugins: [commonjs(), nodeResolve(), terser()],
