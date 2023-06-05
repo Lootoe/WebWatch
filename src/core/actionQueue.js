@@ -12,6 +12,8 @@ export class ActionQueue {
   /**队列的最大存储量 */
   queue = []
   config
+  reqStack = []
+  isReporting = false
 
   constructor(config) {
     this.config = Object.assign(this.defaultConfig, config)
@@ -19,15 +21,15 @@ export class ActionQueue {
 
   get defaultConfig() {
     return {
-      maxSize: 10,
-      beforeHook: null,
+      queueSize: 10,
+      beforePush: null,
     }
   }
 
   /**为了触发入队列之前的钩子函数 */
   pushAction(action) {
-    if (typeof this.config.beforeHook === 'function') {
-      let result = this.config.beforeHook(action)
+    if (typeof this.config.beforePush === 'function') {
+      let result = this.config.beforePush(action)
       if (!result) {
         this.__pushAction(action)
       } else {
@@ -41,7 +43,7 @@ export class ActionQueue {
 
   __pushAction(action) {
     // 如果时间不存在就添加时间，方便下面对比
-    if (this.queue.length >= this.config.maxSize) {
+    if (this.queue.length >= this.config.queueSize) {
       this.queue.shift()
     }
     this.queue.push(action)
@@ -50,5 +52,17 @@ export class ActionQueue {
   // 拿到当前所有actions副本
   getActions() {
     return [...this.queue]
+  }
+
+  idleReport(fn) {
+    if (!this.isReporting) {
+      this.isReporting = true
+      this.reqStack.push(fn)
+      requestIdleCallback(() => {
+        this.isReporting = false
+        const callback = this.reqStack.shift()
+        callback()
+      })
+    }
   }
 }
