@@ -10,8 +10,9 @@ import { ActionTracker } from './actionTracker'
 import { ActionQueue } from './actionQueue'
 import { Recorder } from './recorder'
 import { getUserAgent } from './ua'
-import { report } from '../utils/tools'
+import { report, getFullTime } from '../utils/tools'
 import { VERSION, ERRORTYPE } from '../enums/type'
+import { uid } from 'uid'
 
 export class WebWatch {
   actionQueue
@@ -62,21 +63,29 @@ export class WebWatch {
       type: ERRORTYPE.CODE,
       message: message,
       detail: detail,
+      time: getFullTime(Date.now()),
     }
     this.actionQueue.pushAction(pak)
     this.reportError()
   }
 
   reportError() {
+    const id = uid(7)
     const fn = () => {
       // 上报actions
       const agent = getUserAgent()
       const actions = this.actionQueue.getActions()
+      const errAction = actions[actions.length - 1]
       const payload1 = {
-        agent,
-        actions,
-        sdkVersion: VERSION,
-        extra: this.extra,
+        id,
+        type: errAction.type,
+        time: errAction.time,
+        data: {
+          agent,
+          actions,
+          sdkVersion: VERSION,
+          extra: this.extra,
+        },
       }
       this.beforeReport(payload1)
       report(this.actionUrl, payload1, data => {
@@ -84,7 +93,7 @@ export class WebWatch {
       })
       // 上报events
       const evts = this.recorder.getRecentEvents(10)
-      const payload2 = JSON.stringify({ events: evts })
+      const payload2 = { data: JSON.stringify(evts), id }
       report(this.recordUrl, payload2, data => {
         console.log('服务器链接已关闭，上报失败', data)
       })
