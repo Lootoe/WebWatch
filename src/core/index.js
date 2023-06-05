@@ -11,7 +11,8 @@ import { ActionQueue } from './actionQueue'
 import { Recorder } from './recorder'
 import { getUserAgent } from './ua'
 import { report } from '../utils/tools'
-import { VERSION } from '../enums/type'
+import { VERSION, ERRORTYPE } from '../enums/type'
+
 export class WebWatch {
   actionQueue
   actionTracker
@@ -19,7 +20,8 @@ export class WebWatch {
   /**用户上报给服务器时的额外数据 */
   extra
   /**上报给服务器的地址 */
-  remoteUrl
+  actionUrl
+  recordUrl
   /**在上报之前做点什么 */
   beforeReport
   /**
@@ -30,11 +32,12 @@ export class WebWatch {
    */
   constructor(options, extra) {
     const { queueSize, beforePush, beforeReport } = options
-    const { rrwebOptions, remoteUrl } = options
+    const { rrwebOptions, actionUrl, recordUrl } = options
     this.actionQueue = new ActionQueue({ queueSize, beforePush })
     this.actionTracker = new ActionTracker()
     this.recorder = new Recorder({ config: rrwebOptions })
-    this.remoteUrl = remoteUrl
+    this.actionUrl = actionUrl
+    this.recordUrl = recordUrl
     this.extra = extra
     this.beforeReport = beforeReport
   }
@@ -49,21 +52,43 @@ export class WebWatch {
     // 当捕获到错误时，拿当前队列的数据闲时上报
     this.actionTracker.onError = pak => {
       this.actionQueue.pushAction(pak)
-      const fn = () => {
-        const agent = getUserAgent()
-        const actions = this.actionQueue.getActions()
-        const payload = {
-          agent,
-          actions,
-          sdkVersion: VERSION,
-          extra: this.extra,
-        }
-        this.beforeReport(payload)
-        report(this.remoteUrl, payload, data => {
-          console.log('服务器链接已关闭，上报失败', data)
-        })
-      }
-      this.actionQueue.idleReport(fn)
+      this.reportError()
     }
+  }
+
+  customError(message, detail) {
+    // 拿到详细的报错信息
+    const pak = {
+      type: ERRORTYPE.CODE,
+      message: message,
+      detail: detail,
+    }
+    this.actionQueue.pushAction(pak)
+    this.reportError()
+  }
+
+  reportError() {
+    const fn = () => {
+      // 上报actions
+      const agent = getUserAgent()
+      const actions = this.actionQueue.getActions()
+      const payload1 = {
+        agent,
+        actions,
+        sdkVersion: VERSION,
+        extra: this.extra,
+      }
+      this.beforeReport(payload1)
+      report(this.actionUrl, payload1, data => {
+        console.log('服务器链接已关闭，上报失败', data)
+      })
+      // 上报events
+      const evts = this.recorder.getRecentEvents(10)
+      const payload2 = JSON.stringify({ events: evts })
+      report(this.recordUrl, payload2, data => {
+        console.log('服务器链接已关闭，上报失败', data)
+      })
+    }
+    this.actionQueue.idleReport(fn)
   }
 }
