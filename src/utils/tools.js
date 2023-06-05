@@ -44,7 +44,7 @@ export function serializeDOM(dom) {
  * @param {string} url 请求的URL
  * @param {object} data 请求的数据
  */
-export function report(url, data) {
+export function report(url, data, errCalllback) {
   const pak = JSON.stringify(data)
   // 当发生错误时，中断fetch请求
   const controller = new AbortController()
@@ -58,6 +58,6 @@ export function report(url, data) {
     body: pak,
   }).catch(err => {
     controller.abort('fecth失败，中断请求')
-    console.log('err', err)
+    errCalllback(err)
   })
 }

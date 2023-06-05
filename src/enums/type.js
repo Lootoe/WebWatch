@@ -23,3 +23,5 @@ export const ACTIONTYPE = {
 
 /**点击下面这些元素不会响应事件 */
 export const IgnoreElement = [HTMLBodyElement, HTMLHtmlElement]
+
+export const VERSION = '1.0.0'

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试</title>
+</head>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    li {
+        list-style: none;
+    }
+
+    body {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .box {
+        background-color: burlywood;
+        padding: 20px;
+    }
+
+    .goods-list {
+        background-color: chocolate;
+        padding: 10px;
+    }
+
+    #unique {
+        width: 100px;
+        height: 100px;
+        background-color: skyblue;
+        margin-left: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+    }
+</style>
+
+<body>
+    <!-- DOM测试 -->
+    <div class="box">
+        <ul class="goods-list">
+            <li class="goods-item">Lorem ipsum dolor sit amet.</li>
+            <li class="goods-item">Lorem ipsum dolor sit amet.</li>
+            <li class="goods-item">Lorem ipsum dolor sit amet.</li>
+        </ul>
+    </div>
+    <div id="unique">跳转</div>
+
+    <script src="./webwatch.umd.js"></script>
+    <script>
+        const ww = new webwatch.WebWatch({
+            queueSize: 10,
+            beforePush: (pak) => {
+                console.log('pak', pak)
+            },
+            beforeReport:(payload)=>{
+                console.log('payload',payload)
+            },
+            rrwebOptions: null,
+            remoteUrl: 'http://localhost/report'
+        }, {
+            appName: 'branch8'
+        }, (sdkErr) => {
+            console.log('sdkErr', sdkErr)
+        })
+        ww.init()
+    </script>
+    <script>
+        // 路透跳转
+        const btn = document.querySelector('#unique')
+        btn.onclick = () => {
+            history.pushState(null, null, '/abc' + Math.ceil(Math.random() * 10))
+        }
+        // 报错捕获
+        setTimeout(() => {
+            Promise.reject('eeeeeeeeeeeee')
+        }, 4000);
+        // 路由测试
+        const xhr1 = new XMLHttpRequest()
+        xhr1.open('GET', ' http://localhost:9000/getTest')
+        xhr1.send()
+
+        const xhr2 = new XMLHttpRequest()
+        xhr2.open('GET', 'http://localhost:9000/getTest1')
+        xhr2.send()
+
+        const xhr3 = new XMLHttpRequest()
+        xhr3.open('POST', 'http://localhost:9000/postTest')
+        xhr3.send({ name: '123', code: 666 })
+
+        const xhr4 = new XMLHttpRequest()
+        xhr4.open('POST', 'http://localhost:9000/postTest1')
+        xhr4.send({ name: '123', code: 666 })
+    </script>
+</body>
+
+</html>

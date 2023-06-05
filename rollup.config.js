@@ -14,48 +14,86 @@ import { nodeResolve } from '@rollup/plugin-node-resolve'
 import terser from '@rollup/plugin-terser'
 
 export default [
-  // {
-  //   input: './src/core/actionTracker.js',
-  //   output: [
-  //     {
-  //       file: './test/actionTracker/actionTracker.js',
-  //       format: 'umd',
-  //       name: 'actionTracker',
-  //     },
-  //   ],
-  //   plugins: [commonjs(), nodeResolve(), terser()],
-  // },
-  // {
-  //   input: './src/core/ua.js',
-  //   output: [
-  //     {
-  //       file: './test/ua/ua.js',
-  //       format: 'umd',
-  //       name: 'ua',
-  //     },
-  //   ],
-  //   plugins: [commonjs(), nodeResolve(), terser()],
-  // },
-  // {
-  //   input: './src/core/recorder.js',
-  //   output: [
-  //     {
-  //       file: './test/recorder/recorder.js',
-  //       format: 'umd',
-  //       name: 'recorder',
-  //     },
-  //   ],
-  //   plugins: [commonjs(), nodeResolve(), terser()],
-  // },
+  // 不需要额外装rrweb
   {
-    input: './src/core/actionQueue.js',
+    input: './src/core/index.js',
     output: [
       {
-        file: './test/actionQueue/actionQueue.js',
+        file: './dist/webwatch.esm.all.js',
+        format: 'esm',
+      },
+    ],
+    plugins: [commonjs(), nodeResolve(), terser()],
+  },
+  // 需要额外装rrweb
+  {
+    input: './src/core/index.js',
+    output: [
+      {
+        file: './dist/webwatch.esm.js',
+        format: 'esm',
+      },
+    ],
+    external: ['rrweb'],
+    plugins: [commonjs(), nodeResolve(), terser()],
+  },
+  // 本地调试的版本
+  {
+    input: './src/core/index.js',
+    output: [
+      {
+        file: './dist/webwatch.umd.js',
         format: 'umd',
-        name: 'actionQueue',
+        name: 'webwatch',
       },
     ],
     plugins: [commonjs(), nodeResolve(), terser()],
   },
 ]
+
+// export default [
+// {
+//   input: './src/core/actionTracker.js',
+//   output: [
+//     {
+//       file: './test/actionTracker/actionTracker.js',
+//       format: 'umd',
+//       name: 'actionTracker',
+//     },
+//   ],
+//   plugins: [commonjs(), nodeResolve(), terser()],
+// },
+// {
+//   input: './src/core/ua.js',
+//   output: [
+//     {
+//       file: './test/ua/ua.js',
+//       format: 'umd',
+//       name: 'ua',
+//     },
+//   ],
+//   plugins: [commonjs(), nodeResolve(), terser()],
+// },
+// {
+//   input: './src/core/recorder.js',
+//   output: [
+//     {
+//       file: './test/recorder/recorder.js',
+//       format: 'umd',
+//       name: 'recorder',
+//     },
+//   ],
+//   plugins: [commonjs(), nodeResolve(), terser()],
+// },
+// {
+//   input: './src/core/actionQueue.js',
+//   output: [
+//     {
+//       file: './test/actionQueue/actionQueue.js',
+//       format: 'umd',
+//       name: 'actionQueue',
+//     },
+//   ],
+//   plugins: [commonjs(), nodeResolve(), terser()],
+// },
+// ]
