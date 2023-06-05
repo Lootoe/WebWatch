@@ -8,6 +8,7 @@
  */
 import { domCapture, errorCapture, requestCapture, routerCapture } from '../utils/index'
 import { getFullTime } from '../utils/tools'
+import { uid } from 'uid'
 export class ActionTracker {
   /**当有用户行为时触发 */
   onAction
@@ -26,6 +27,7 @@ export class ActionTracker {
     const timeStamp = Date.now()
     const timeNow = getFullTime(timeStamp)
     pak.time = timeNow
+    pak.id = uid(7)
     return pak
   }
 

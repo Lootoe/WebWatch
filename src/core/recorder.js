@@ -62,7 +62,7 @@ export class Recorder {
       },
       /**每隔多久制作一次快照，默认是1秒，大于这个时间会导致录制时间不准确 */
       checkoutEveryNms: 1 * 1000,
-      ...options
+      ...options,
     })
   }
 

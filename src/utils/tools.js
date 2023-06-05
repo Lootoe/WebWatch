@@ -38,3 +38,26 @@ export function serializeDOM(dom) {
   const result = str.replace(reg, '')
   return result
 }
+
+/**
+ *
+ * @param {string} url 请求的URL
+ * @param {object} data 请求的数据
+ */
+export function report(url, data) {
+  const pak = JSON.stringify(data)
+  // 当发生错误时，中断fetch请求
+  const controller = new AbortController()
+  const signal = controller.signal
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    signal: signal,
+    body: pak,
+  }).catch(err => {
+    controller.abort('fecth失败，中断请求')
+    console.log('err', err)
+  })
+}

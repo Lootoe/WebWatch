@@ -36,13 +36,24 @@ export default [
   //   ],
   //   plugins: [commonjs(), nodeResolve(), terser()],
   // },
+  // {
+  //   input: './src/core/recorder.js',
+  //   output: [
+  //     {
+  //       file: './test/recorder/recorder.js',
+  //       format: 'umd',
+  //       name: 'recorder',
+  //     },
+  //   ],
+  //   plugins: [commonjs(), nodeResolve(), terser()],
+  // },
   {
-    input: './src/core/recorder.js',
+    input: './src/core/actionQueue.js',
     output: [
       {
-        file: './test/recorder/recorder.js',
+        file: './test/actionQueue/actionQueue.js',
         format: 'umd',
-        name: 'recorder',
+        name: 'actionQueue',
       },
     ],
     plugins: [commonjs(), nodeResolve(), terser()],
