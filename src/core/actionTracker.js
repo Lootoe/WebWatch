@@ -9,6 +9,7 @@
 import { domCapture, errorCapture, requestCapture, routerCapture } from '../utils/index'
 import { getFullTime } from '../utils/tools'
 import { uid } from 'uid'
+import { ERRORTYPE } from '../enums/type'
 export class ActionTracker {
   /**当有用户行为时触发 */
   onAction
@@ -19,6 +20,7 @@ export class ActionTracker {
     /**其作为回调函数，this为undefined ，所以需要在这里绑定一下*/
     this.__dispatchAction = this.__dispatchAction.bind(this)
     this.__dispatchError = this.__dispatchError.bind(this)
+    this.__dispatchAPIError = this.__dispatchAPIError.bind(this)
   }
 
   /**对捕获的数据统一加工处理 */
@@ -41,13 +43,22 @@ export class ActionTracker {
     this.onError && this.onError(result)
   }
 
+  __dispatchAPIError(xhrData) {
+    const response = JSON.parse(xhrData.data.response)
+    const code = response.code
+    if (code && code !== 200) {
+      xhrData.type = ERRORTYPE.API
+      this.__dispatchError(xhrData)
+    }
+  }
+
   init() {
     domCapture.captureDOM(this.__dispatchAction)
     routerCapture.captureRouteChange(this.__dispatchAction)
     errorCapture.captureCodeError(this.__dispatchError)
     errorCapture.capturePromiseError(this.__dispatchError)
     errorCapture.captureAPIError(data => {
-      requestCapture.captureRequest(data, this.__dispatchAction)
+      requestCapture.captureRequest(data, this.__dispatchAPIError)
     }, this.__dispatchError)
   }
 
