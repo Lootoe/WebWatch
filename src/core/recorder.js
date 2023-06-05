@@ -31,7 +31,7 @@ export class Recorder {
   /**最多能录制多少个事件集，防止存储的数据太多 */
   maxLength = 40
 
-  constructor() {
+  constructor(config) {
     const __this = this
     this.start = () => {
       // 没有录制时，才能开始
@@ -44,6 +44,8 @@ export class Recorder {
         }
       }
     }
+
+    let options = typeof config === 'object' ? config : {}
 
     this.rrwebStopFn = rrweb.record({
       emit(event, isCheckout) {
@@ -60,6 +62,7 @@ export class Recorder {
       },
       /**每隔多久制作一次快照，默认是1秒，大于这个时间会导致录制时间不准确 */
       checkoutEveryNms: 1 * 1000,
+      ...options
     })
   }
 
