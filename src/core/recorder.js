@@ -61,7 +61,7 @@ export class Recorder {
         __this.recording && __this.allEvents.push(event)
       },
       /**每隔多久制作一次快照，默认是1秒，大于这个时间会导致录制时间不准确 */
-      checkoutEveryNms: 1 * 1000,
+      checkoutEveryNth: 200, // 每 200 个 event 重新制作快照
       ...options,
     })
   }
@@ -76,9 +76,9 @@ export class Recorder {
     }
   }
 
-  /**获取特定时间的事件 */
-  getRecentEvents(time) {
-    const actualCount = Math.min(this.eventMatrix.length, time)
+  /**获取特定次数的事件 */
+  getRecentEvents(count) {
+    const actualCount = Math.min(this.eventMatrix.length, count)
     const lastIndex = this.eventMatrix.length - 1
     const eventsSource = []
     for (let i = 0; i < actualCount; i++) {

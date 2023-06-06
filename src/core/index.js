@@ -92,7 +92,7 @@ export class WebWatch {
         console.log('服务器链接已关闭，上报失败', data)
       })
       // 上报events
-      const evts = this.recorder.getRecentEvents(10)
+      const evts = this.recorder.getRecentEvents(1)
       const payload2 = { data: JSON.stringify(evts), id }
       report(this.recordUrl, payload2, data => {
         console.log('服务器链接已关闭，上报失败', data)
